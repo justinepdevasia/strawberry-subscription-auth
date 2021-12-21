@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "strawberry-subscription-auth"
+version = "0.1.0"
+description = ""
+authors = ["justinepdevasia <40311683+justinepdevasia@users.noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+fastapi = "^0.70.1"
+uvicorn = {extras = ["standard"], version = "^0.15.0"}
+strawberry-graphql = "^0.93.8"
+broadcaster = "^0.2.0"
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+
+[tool.poetry.scripts]
+start = "runserver:uvicorn_run"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

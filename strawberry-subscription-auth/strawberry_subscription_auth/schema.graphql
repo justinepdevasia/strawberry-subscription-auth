@@ -1,0 +1,17 @@
+type Message {
+  timestamp: String!
+  owner: String!
+  content: String!
+}
+
+type Mutation {
+  createMessage(name: String!, content: String!, channel: String!): Boolean!
+}
+
+type Query {
+  hello: String!
+}
+
+type Subscription {
+  getPushMessage(channel: String!): Message!
+}
