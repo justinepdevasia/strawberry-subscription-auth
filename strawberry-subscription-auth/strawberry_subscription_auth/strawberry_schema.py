@@ -20,8 +20,6 @@ from .custom_auth import IsAuthenticated
 
 
 
-
-
 # broadcast = Broadcast("redis://localhost:6379")  # redis pub sub
 # broadcast = Broadcast('postgres://postgres:postgres@localhost:5432/broadcaster')
 broadcast = Broadcast('memory://') # for in memory pub sub
@@ -54,6 +52,7 @@ class Mutation:
 class Subscription:
     @strawberry.subscription(permission_classes=[IsAuthenticated])
     async def get_push_message(self,channel: str) -> Message:
+        print(f"message ready to be received")
         async with broadcast.subscribe(channel=channel) as subscriber:
             async for event in subscriber:
                 yield Message(**json.loads(event.message))
