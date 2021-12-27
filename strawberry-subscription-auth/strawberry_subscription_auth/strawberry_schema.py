@@ -3,20 +3,14 @@ from __future__ import annotations
 
 import strawberry
 from broadcaster import Broadcast
-from strawberry.fastapi import GraphQLRouter
-from strawberry.fastapi.handlers import GraphQLWSHandler
-from strawberry.subscriptions.protocols.graphql_ws.types import OperationMessage
 from strawberry.types import Info
- 
-
-
 
 
 import json
 import datetime
 from typing import Optional
 
-from .custom_auth import IsAuthenticated
+from .custom_auth import IsAuthenticated, AuthGraphQLRouter
 
 
 
@@ -64,27 +58,8 @@ class Query:
     def hello(self) -> str:
         return "World"
 
-class AuthGraphQLWSHandler(GraphQLWSHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.authToken: Optional[str] = None
-
-    async def handle_connection_init(self, message: OperationMessage) -> None:
-        connection_params = message["payload"]
-        self.token = connection_params.get("authToken")
-        # print("token during connection init ",self.token)
-        await super().handle_connection_init(message)
-
-    async def get_context(self):
-        context = await super().get_context()
-        context["authToken"] = self.token
-        return context
-
-
-class AuthGraphQLRouter(GraphQLRouter):
-    graphql_ws_handler_class = AuthGraphQLWSHandler
-
-
 schema = strawberry.Schema(query=Query, mutation=Mutation, subscription=Subscription)
 graphql_app = AuthGraphQLRouter(schema, graphiql=True)
+
+
 
